@@ -10,16 +10,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Persistance
+namespace Persistance;
+
+public static class PersistanceServiceRegistration
 {
-    public static class PersistanceServiceRegistration
+    public static IServiceCollection AddPersistanceServices(this IServiceCollection services, IConfiguration configuration)
     {
-        public static IServiceCollection AddPersistanceServices(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddDbContext<BaseDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("RentACarConnectionString")));
-            services.AddScoped<IBrandRepository, BrandRepository>();
-            
-            return services;
-        }
+        services.AddDbContext<BaseDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("RentACarConnectionString")));
+        services.AddScoped<IBrandRepository, BrandRepository>();
+        
+        return services;
     }
 }
