@@ -7,36 +7,35 @@ using Core.Application.Requests;
 using Core.Persistence.Dynamic;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebAPI.Controllers
+namespace WebAPI.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class ModelsController : BaseController
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ModelsController : BaseController
+    [HttpPost]
+    public async Task<IActionResult> Add([FromBody] CreateModelCommand createModelCommand)
     {
-        [HttpPost]
-        public async Task<IActionResult> Add([FromBody] CreateModelCommand createModelCommand)
-        {
-            CreatedModelDto result = await Mediator.Send(createModelCommand);
+        CreatedModelDto result = await Mediator.Send(createModelCommand);
 
-            return Created("", result);
-        }
+        return Created("", result);
+    }
 
-        [HttpGet]
-        public async Task<IActionResult> GetList([FromQuery] PageRequest pageRequest)
-        {
-            GetListModelQuery getListModelQuery = new() { PageRequest = pageRequest };
-            ModelListModel result = await Mediator.Send(getListModelQuery);
+    [HttpGet]
+    public async Task<IActionResult> GetList([FromQuery] PageRequest pageRequest)
+    {
+        GetListModelQuery getListModelQuery = new() { PageRequest = pageRequest };
+        ModelListModel result = await Mediator.Send(getListModelQuery);
 
-            return Ok(result);
-        }
+        return Ok(result);
+    }
 
-        [HttpPost("GetList/ByDynamic")]
-        public async Task<IActionResult> GetListByDynamic([FromQuery] PageRequest pageRequest, [FromBody] Dynamic dynamic)
-        {
-            GetListModelByDynamicQuery getListModelByDynamicQuery = new() { PageRequest = pageRequest, Dynamic = dynamic };
-            ModelListModel result = await Mediator.Send(getListModelByDynamicQuery);
+    [HttpPost("GetList/ByDynamic")]
+    public async Task<IActionResult> GetListByDynamic([FromQuery] PageRequest pageRequest, [FromBody] Dynamic dynamic)
+    {
+        GetListModelByDynamicQuery getListModelByDynamicQuery = new() { PageRequest = pageRequest, Dynamic = dynamic };
+        ModelListModel result = await Mediator.Send(getListModelByDynamicQuery);
 
-            return Ok(result);
-        }
+        return Ok(result);
     }
 }
